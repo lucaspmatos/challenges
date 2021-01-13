@@ -168,13 +168,14 @@ body {
   justify-content: space-between;
 }
 
-.users {
+#users {
   width: 75%;
-  height: 445px;
+  height: 100%;
   background-color: #efefef;
   border-bottom: 9px solid white;
 
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -186,6 +187,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .users-box {
@@ -200,8 +202,8 @@ body {
 }
 
 .users-details {
-  width: 69%;
-  height: 40%;
+  width: 85%;
+  height: 35%;
   text-align: center;
   color: #616161;
 
