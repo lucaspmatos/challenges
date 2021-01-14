@@ -56,14 +56,14 @@ body {
   padding-left: 15px;
   border-radius: 25px;
   background-color: #efefef;
-  
+
   display: flex;
   justify-content: left;
   align-items: center;
 }
 
 .fa-search {
-  color: #9C9C9C;
+  color: #9c9c9c;
 }
 
 .search-input {
@@ -107,7 +107,8 @@ body {
   height: 180px;
 }
 
-.footer-logo, .footer-company {
+.footer-logo,
+.footer-company {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -133,11 +134,11 @@ body {
 }
 
 .fa-facebook {
-  color: #4E71A7;
+  color: #4e71a7;
 }
 
 .fa-instagram-square {
-  color: #3E729A;
+  color: #3e729a;
 }
 
 .filters-search {
@@ -221,6 +222,7 @@ body {
   font-size: 12px;
 }
 
-.users-box, .user-picture {
+.users-box,
+.user-picture {
   border-radius: 8px;
 }

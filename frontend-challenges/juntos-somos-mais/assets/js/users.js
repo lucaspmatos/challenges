@@ -1,36 +1,42 @@
-let usersElement = document.querySelector('#users');
+let usersElement = document.querySelector("#users");
 
-(function() {
-  var cors_api_host = 'cors-anywhere.herokuapp.com';
-  var cors_api_url = 'https://' + cors_api_host + '/';
+// Função que permite o consumo da API
+(function () {
+  var cors_api_host = "cors-anywhere.herokuapp.com";
+  var cors_api_url = "https://" + cors_api_host + "/";
   var slice = [].slice;
-  var origin = window.location.protocol + '//' + window.location.host;
+  var origin = window.location.protocol + "//" + window.location.host;
   var open = XMLHttpRequest.prototype.open;
-  XMLHttpRequest.prototype.open = function() {
-      var args = slice.call(arguments);
-      var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
-      if (targetOrigin && targetOrigin[0].toLowerCase() !== origin &&
-          targetOrigin[1] !== cors_api_host) {
-          args[1] = cors_api_url + args[1];
-      }
-      return open.apply(this, args);
+  XMLHttpRequest.prototype.open = function () {
+    var args = slice.call(arguments);
+    var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
+    if (
+      targetOrigin &&
+      targetOrigin[0].toLowerCase() !== origin &&
+      targetOrigin[1] !== cors_api_host
+    ) {
+      args[1] = cors_api_url + args[1];
+    }
+    return open.apply(this, args);
   };
 })();
+
 function capitalize(word) {
   return word
     .toLowerCase()
-    .replace(/\w/, firstLetter => firstLetter.toUpperCase());
+    .replace(/\w/, (firstLetter) => firstLetter.toUpperCase());
 }
 
 function treatStreet(string) {
-  const street = string.split(' ');
-  let treatedStreet = '';
+  const street = string.split(" ");
+  let treatedStreet = "";
 
   const number = street.shift();
+
   street.map((value) => {
-    if (value.length <= 2 && !value.startsWith('d')) {
+    if (value.length <= 2 && !value.startsWith("d")) {
       treatedStreet += `${value}`;
-    } else if (value.length <= 3 && value.startsWith('d')) {
+    } else if (value.length <= 3 && value.startsWith("d")) {
       treatedStreet += ` ${value}`;
     } else {
       treatedStreet += ` ${capitalize(value)}`;
@@ -41,11 +47,11 @@ function treatStreet(string) {
 }
 
 function treatString(str) {
-  const string = str.split(' ');
-  let treatedString = '';
-  
+  const string = str.split(" ");
+  let treatedString = "";
+
   string.map((value) => {
-    if (value.length <= 3 && value.startsWith('d')) {
+    if (value.length <= 3 && value.startsWith("d")) {
       treatedString += ` ${value}`;
     } else {
       treatedString += ` ${capitalize(value)}`;
@@ -76,9 +82,9 @@ function getUsers() {
 
       let showUsers = "";
 
-      let usersContainer = document.createElement('div');
+      let usersContainer = document.createElement("div");
 
-      usersContainer.setAttribute('class', 'users-container');
+      usersContainer.setAttribute("class", "users-container");
 
       for (let i = 0; i < arr[pag].length; i += 1) {
         showUsers += `
