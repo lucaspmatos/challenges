@@ -59,49 +59,53 @@ function getUsers() {
   axios
     .get("https://jsm-challenges.s3.amazonaws.com/frontend-challenge.json")
     .then(function (response) {
-      console.log(response);
+      // console.log(response);
 
       let users = response.data.results;
 
-      console.log(users);
+      // console.log(users);
 
-      let aux = 0;
+      let arr = [];
+      let corte = 9;
 
-      let cont = 0;
-
-      let obj = {};
-
-      for (let i = 0; i < 18; i += 1) {
-        if (cont <= 9) {
-          obj[aux] = {
-            users: 'string',
-          };
-        }
-
-        if (cont === 9) {
-          aux += 1;
-        }
-
-        cont += 1;
+      for (let i = 0; i < users.length; i = i + corte) {
+        arr.push(users.slice(i, i + corte));
       }
 
-      console.log(obj);
+      let pag = 0;
+
+      let showUsers = "";
+
+      let usersContainer = document.createElement('div');
+
+      usersContainer.setAttribute('class', 'users-container');
+
+      for (let i = 0; i < arr[pag].length; i += 1) {
+        showUsers += `
+          <div id="users-box" class="users-box">
+            <img src="${arr[pag][i].picture.large}" class="user-picture" />
+            <div class="users-details">
+              <h5>${treatString(arr[pag][i].name.first + ' ' + arr[pag][i].name.last)}</h5>
+              <span class="street">${treatStreet(arr[pag][i].location.street)}</span>
+              <span class="city">${treatString(arr[pag][i].location.city)} </br>
+              ${treatString(arr[pag][i].location.state)} - CEP: ${arr[pag][i].location.postcode}</span>
+            </div>
+          </div>
+          `; 
+      }
+
+      usersContainer.innerHTML = showUsers;
+
+      usersElement.appendChild(usersContainer);
 
       /* let showUsers = "";
 
-      const k = parseInt(users.length/3);
-
-      let j = 0;
-      let l = 0;
-
-      for (let i = 0; i < k; i += 1) {
+      for (let i = 0; i < users.length; i += 1) {
         let usersContainer = document.createElement('div');
 
         usersContainer.setAttribute('class', 'users-container');
 
-        l = j + 3;
-
-        for (j; j < l; j += 3) {
+        for (j; j < l; j += 1) {
           showUsers += `
           <div id="users-box" class="users-box">
             <img src="${users[j].picture.large}" class="user-picture" />
