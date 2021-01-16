@@ -91,14 +91,14 @@ async function getNumPages(users) {
   numPages = Math.ceil(users.length / recordsPerPage);
 }
 
-let usersContainer = document.createElement('div');
-usersContainer.setAttribute('class', 'users-container');
+let usersContainer = document.createElement("div");
+usersContainer.setAttribute("class", "users-container");
 
-document.getElementById('search-button').addEventListener('submit', searchUser);
+document.getElementById("search-button").addEventListener("submit", searchUser);
 
 function searchUser(e) {
   e.preventDefault();
-  const search = document.getElementById('search').value || '';
+  const search = document.getElementById("search").value || "";
   changePage(1, search.toLowerCase());
 }
 
@@ -107,7 +107,7 @@ async function changePage(page, result) {
 
   const word = result;
 
-  const users = test.filter((value) =>{
+  const users = test.filter((value) => {
     if (value.name.first.startsWith(word)) {
       return value;
     }
@@ -117,7 +117,7 @@ async function changePage(page, result) {
 
   let btn_next = document.getElementById("btn_next");
   let btn_prev = document.getElementById("btn_prev");
-  
+
   // Validate page
   if (page < 1) page = 1;
   if (page > numPages) page = numPages;
@@ -139,7 +139,7 @@ async function changePage(page, result) {
     </div>
     `;
   }
-
+  
   usersContainer.innerHTML = showUsers;
 
   usersElement.appendChild(usersContainer);
@@ -158,40 +158,5 @@ async function changePage(page, result) {
 }
 
 window.onload = function () {
-  changePage(1, '');
+  changePage(1, "");
 };
-
-/* let arr = [];
-      let corte = 9;
-
-      for (let i = 0; i < users.length; i = i + corte) {
-        arr.push(users.slice(i, i + corte));
-      }
-
-      console.log(arr);
-
-      let pag = 0;
-
-      let showUsers = "";
-
-      let usersContainer = document.createElement("div");
-
-      usersContainer.setAttribute("class", "users-container");
-
-      for (let i = 0; i < arr[pag].length; i += 1) {
-        showUsers += `
-          <div id="users-box" class="users-box">
-            <img src="${arr[pag][i].picture.large}" class="user-picture" />
-            <div class="users-details">
-              <h5>${treatString(arr[pag][i].name.first + ' ' + arr[pag][i].name.last)}</h5>
-              <span class="street">${treatStreet(arr[pag][i].location.street)}</span>
-              <span class="city">${treatString(arr[pag][i].location.city)} </br>
-              ${treatString(arr[pag][i].location.state)} - CEP: ${arr[pag][i].location.postcode}</span>
-            </div>
-          </div>
-          `; 
-      }
-
-      usersContainer.innerHTML = showUsers;
-
-      usersElement.appendChild(usersContainer); */

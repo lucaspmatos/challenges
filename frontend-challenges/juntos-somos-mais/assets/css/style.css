@@ -258,7 +258,9 @@ body {
   align-items: center;
 }
 
-.pag-link:hover, .pag-link:active, .pag-link a {
+.pag-link:hover,
+.pag-link:active,
+.pag-link a {
   background-color: #d8d8d8;
   text-decoration: none;
   cursor: pointer;
