@@ -61,22 +61,114 @@ function treatString(str) {
   return treatedString;
 }
 
-function getUsers() {
-  axios
-    .get("https://jsm-challenges.s3.amazonaws.com/frontend-challenge.json")
-    .then(function (response) {
-      // console.log(response);
+let currentPage = 1;
+let recordsPerPage = 9;
+let numPages = 0;
 
-      let users = response.data.results;
+async function getUsers() {
+  const { data } = await axios.get(
+    "https://jsm-challenges.s3.amazonaws.com/frontend-challenge.json"
+  );
 
-      // console.log(users);
+  return data.results;
+}
 
-      let arr = [];
+function prevPage() {
+  if (currentPage > 1) {
+    currentPage--;
+    changePage(currentPage);
+  }
+}
+
+function nextPage() {
+  if (currentPage < numPages) {
+    currentPage++;
+    changePage(currentPage);
+  }
+}
+
+async function getNumPages(users) {
+  numPages = Math.ceil(users.length / recordsPerPage);
+}
+
+let usersContainer = document.createElement('div');
+usersContainer.setAttribute('class', 'users-container');
+
+document.getElementById('search-button').addEventListener('submit', searchUser);
+
+function searchUser(e) {
+  e.preventDefault();
+  const search = document.getElementById('search').value || '';
+  changePage(1, search.toLowerCase());
+}
+
+async function changePage(page, result) {
+  const test = await getUsers();
+
+  const word = result;
+
+  const users = test.filter((value) =>{
+    if (value.name.first.startsWith(word)) {
+      return value;
+    }
+  });
+
+  getNumPages(users);
+
+  let btn_next = document.getElementById("btn_next");
+  let btn_prev = document.getElementById("btn_prev");
+  
+  // Validate page
+  if (page < 1) page = 1;
+  if (page > numPages) page = numPages;
+
+  let showUsers = "";
+
+  usersContainer.innerHTML = "";
+
+  for (let i = (page - 1) * recordsPerPage; i < (page * recordsPerPage) && i < users.length; i++) {
+    showUsers += `
+    <div id="users-box" class="users-box">
+      <img src="${users[i].picture.large}" class="user-picture" />
+      <div class="users-details">
+        <h5>${treatString(users[i].name.first + ' ' + users[i].name.last)}</h5>
+        <span class="street">${treatStreet(users[i].location.street)}</span>
+        <span class="city">${treatString(users[i].location.city)} </br>
+        ${treatString(users[i].location.state)} - CEP: ${users[i].location.postcode}</span>
+      </div>
+    </div>
+    `;
+  }
+
+  usersContainer.innerHTML = showUsers;
+
+  usersElement.appendChild(usersContainer);
+
+  if (page == 1) {
+    btn_prev.style.visibility = "hidden";
+  } else {
+    btn_prev.style.visibility = "visible";
+  }
+
+  if (page == numPages) {
+    btn_next.style.visibility = "hidden";
+  } else {
+    btn_next.style.visibility = "visible";
+  }
+}
+
+window.onload = function () {
+  changePage(1, '');
+};
+
+/* let arr = [];
       let corte = 9;
 
       for (let i = 0; i < users.length; i = i + corte) {
         arr.push(users.slice(i, i + corte));
       }
+
+      console.log(arr);
 
       let pag = 0;
 
@@ -102,37 +194,4 @@ function getUsers() {
 
       usersContainer.innerHTML = showUsers;
 
-      usersElement.appendChild(usersContainer);
-
-      /* let showUsers = "";
-
-      for (let i = 0; i < users.length; i += 1) {
-        let usersContainer = document.createElement('div');
-
-        usersContainer.setAttribute('class', 'users-container');
-
-        for (j; j < l; j += 1) {
-          showUsers += `
-          <div id="users-box" class="users-box">
-            <img src="${users[j].picture.large}" class="user-picture" />
-            <div class="users-details">
-              <h5>${treatString(users[j].name.first + ' ' + users[j].name.last)}</h5>
-              <span class="street">${treatStreet(users[j].location.street)}</span>
-              <span class="city">${treatString(users[j].location.city)} </br>
-              ${treatString(users[j].location.state)} - CEP: ${users[j].location.postcode}</span>
-            </div>
-          </div>
-          `; 
-        }
-
-        usersContainer.innerHTML = showUsers;
-
-        usersElement.appendChild(usersContainer);
-      } */
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-}
-
-getUsers();
+      usersElement.appendChild(usersContainer); */

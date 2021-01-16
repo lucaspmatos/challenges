@@ -20,8 +20,8 @@
       <div class="right-side">
         <form class="form-inline my-2 my-lg-0">
           <div class="search-bar">
-            <i class="fas fa-search"></i>
-            <input class="mr-sm-2 search-input" type="search" placeholder="Buscar aqui" />
+            <button id="search-button" type="submit"><i class="fas fa-search"></i></button>
+            <input type="text" class="mr-sm-2 search-input" id="search" placeholder="Buscar aqui" />
           </div>
         </form>
 
@@ -48,6 +48,13 @@
 
       <div id="users"></div>
     </section>
+
+    <section id="pagination">
+      <div class="pagination-links">
+        <a class="pag-link" href="javascript:prevPage()" id="btn_prev">Prev</a>
+        <a class="pag-link" href="javascript:nextPage()" id="btn_next">Next</a>
+      </div>
+    </section>
   </main>
 
   <footer class="footer-site">
@@ -66,7 +73,7 @@
     </div>
   </footer>
 
-  <script src="https://kit.fontawesome.com/2c36e9b7b1.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/js/all.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script type="text/javascript" src="./assets/js/users.js"></script>
 </body>
