@@ -94,14 +94,6 @@ async function getNumPages(users) {
 let usersContainer = document.createElement("div");
 usersContainer.setAttribute("class", "users-container");
 
-/* document.getElementById("search-button").addEventListener("submit", searchUser);
-
-function searchUser(e) {
-  e.preventDefault();
-  const search = document.getElementById("search").value || "";
-  changePage(1, search.toLowerCase());
-} */
-
 async function changePage(page, result = "") {
   const test = await getUsers();
 
@@ -131,13 +123,13 @@ async function changePage(page, result = "") {
   for (let i = (page - 1) * recordsPerPage; i < (page * recordsPerPage) && i < users.length; i++) {
     showUsers += `
     <div id="users-box" class="users-box">
-      <img src="${users[i].picture.large}" class="user-picture" />
-      <div class="users-details">
-        <h5>${treatString(users[i].name.first + ' ' + users[i].name.last)}</h5>
-        <span class="street">${treatStreet(users[i].location.street)}</span>
-        <span class="city">${treatString(users[i].location.city)} </br>
-        ${treatString(users[i].location.state)} - CEP: ${users[i].location.postcode}</span>
-      </div>
+        <img src="${users[i].picture.large}" class="user-picture" />
+        <div class="users-details">
+          <h5><a id="user-link" href="./user.html?user=${i}" onclick="loadUser(${i})">${treatString(users[i].name.first + ' ' + users[i].name.last)}</a></h5>
+          <span class="street">${treatStreet(users[i].location.street)}</span>
+          <span class="city">${treatString(users[i].location.city)} </br>
+          ${treatString(users[i].location.state)} - CEP: ${users[i].location.postcode}</span>
+        </div>
     </div>
     `;
   }
@@ -162,3 +154,30 @@ async function changePage(page, result = "") {
 window.onload = function () {
   changePage(1, "");
 };
+
+// User Details
+let userDetail = document.querySelector('.user-detail');
+userDetail.innerHTML = '';
+
+function loadUser(id) {
+  const showUser = `
+    <img class="user-picture" src="${users[id].picture.large}" />
+    <div class="user-info">
+        <h3 class="text-center">${treatString(users[id].name.first + ' ' + users[i].name.last)}</h3>
+        <h5 class="text-center">${treatString(users[id].gender)}</h5>
+        <h6 class="text-center">Endereço</h6>
+        <span>Rua: ${treatStreet(users[id].location.street)}</span> </br>
+        <span>Cidade: ${treatString(users[id].location.city)}</span> </br>
+        <span>Estado: ${treatString(users[id].location.state)}</span> </br>
+        <span>CEP: ${users[id].location.postcode}</span> </br>
+        <h6 class="text-center">Contato</h6>
+        <span>E-mail: ${users[id].gender}</span> </br>
+        <span>Telefone: ${users[id].phone} | Celular: ${users[id].cell}</span> </br>
+        <h6 class="text-center">Dados Pessoais</h6>
+        <span>Data de Nascimento: ${users[id].dob.date} | Idade: ${users[id].dob.age} anos</span> </br>
+        <span>Cadastrado(a) em: ${users[id].registered.date} | Há ${users[id].registered.age} anos</span>
+    </div>
+  `;
+
+  userDetail.innerHTML = showUser;
+}
