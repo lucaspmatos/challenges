@@ -94,24 +94,26 @@ async function getNumPages(users) {
 let usersContainer = document.createElement("div");
 usersContainer.setAttribute("class", "users-container");
 
-document.getElementById("search-button").addEventListener("submit", searchUser);
+/* document.getElementById("search-button").addEventListener("submit", searchUser);
 
 function searchUser(e) {
   e.preventDefault();
   const search = document.getElementById("search").value || "";
   changePage(1, search.toLowerCase());
-}
+} */
 
-async function changePage(page, result) {
+async function changePage(page, result = "") {
   const test = await getUsers();
 
   const word = result;
-
+  
   const users = test.filter((value) => {
     if (value.name.first.startsWith(word)) {
       return value;
     }
   });
+
+  console.log(users);
 
   getNumPages(users);
 
