@@ -61,10 +61,23 @@ function treatString(str) {
   return treatedString
 }
 
-let currentPage = 1
-let recordsPerPage = 9
-let numPages = 0
-let users = ''
+function treatDate(str) {
+  const string = str.split("T");
+  const oldDate = string[0].split("-");
+  const newDate = `${oldDate[2]}/${oldDate[1]}/${oldDate[0]}`;
+
+  return newDate;
+}
+
+function treatGender(str) {
+  if (str === 'male') return 'Masculino';
+  else return 'Feminino';
+}
+
+let currentPage = 1;
+let recordsPerPage = 9;
+let numPages = 0;
+let users = '';
 
 async function getUsers() {
   const { data } = await axios.get(
@@ -95,13 +108,7 @@ function getNumPages(usersList) {
 let usersContainer = document.createElement('div')
 usersContainer.setAttribute('class', 'users-container')
 
-/* document.getElementById("search-button").addEventListener("submit", searchUser);
 
-function searchUser(e) {
-  e.preventDefault();
-  const search = document.getElementById("search").value || "";
-  changePage(1, search.toLowerCase());
-} */
 function searchFunction() {
   let input = document.getElementById('search').value
   changePage(1, input)
@@ -139,20 +146,22 @@ async function changePage(page, result = '') {
   ) {
     showUsers += `
     <div id="users-box" class="users-box">
-      <img src="${users[i].picture.large}" class="user-picture" />
-      <div class="users-details">
-        <h5>${treatString(users[i].name.first + ' ' + users[i].name.last)}</h5>
-        <span class="street">${treatStreet(users[i].location.street)}</span>
-        <span class="city">${treatString(users[i].location.city)} </br>
-        ${treatString(users[i].location.state)} - CEP: ${
+        <img src="${users[i].picture.large}" class="user-picture" />
+        <div class="users-details">
+          <h5><a id="user-link" href="./user.html?user=${i}">${treatString(
+      users[i].name.first + " " + users[i].name.last
+    )}</a></h5>
+          <span class="street">${treatStreet(users[i].location.street)}</span>
+          <span class="city">${treatString(users[i].location.city)} </br>
+          ${treatString(users[i].location.state)} - CEP: ${
       users[i].location.postcode
     }</span>
-      </div>
+        </div>
     </div>
     `
   }
 
-  usersContainer.innerHTML = showUsers
+  usersContainer.innerHTML = showUsers;
 
   usersElement.appendChild(usersContainer)
 
@@ -170,5 +179,44 @@ async function changePage(page, result = '') {
 }
 
 window.onload = function () {
-  changePage(1, '')
+  changePage(1, "");
+};
+
+// User Details
+let userDetails = document.querySelector(".user-container");
+userDetails.innerHTML = "";
+
+async function loadUser(id) {
+  const users = await getUsers();
+
+  const showUser = `
+    <div class="user-detail">
+      <img class="user-picture" src="${users[id].picture.large}" />
+      <h4 class="text-center">${treatString(
+        users[id].name.first + " " + users[id].name.last
+      )}</h4>
+      <h6 class="text-center">${treatGender(users[id].gender)}</h6>
+      <div class="user-info">
+          <span class="detail-title">Endereço</span></br>
+          <span>Logradouro: ${treatStreet(users[id].location.street)}</span></br>
+          <span>Cidade: ${treatString(users[id].location.city)}</span></br>
+          <span>Estado: ${treatString(users[id].location.state)}</span></br>
+          <span>CEP: ${users[id].location.postcode}</span></br>
+          <span class="detail-title">Contato</span></br>
+          <span>E-mail: ${users[id].email}</span></br>
+          <span>Telefone: ${users[id].phone} | Celular: ${users[id].cell}</span></br>
+          <span class="detail-title">Dados Pessoais</span></br>
+          <span>Data de Nascimento: ${treatDate(users[id].dob.date)} | Idade: ${users[id].dob.age} anos</span></br>
+          <span>Cadastrado(a) em: ${treatDate(users[id].registered.date)} | Há ${users[id].registered.age} anos</span>
+      </div>
+    </div>
+  `;
+
+  userDetails.innerHTML = showUser;
 }
+
+const url = window.location.href.split("=");
+
+const id = url[1];
+
+loadUser(id);
