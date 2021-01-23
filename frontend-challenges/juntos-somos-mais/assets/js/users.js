@@ -61,6 +61,19 @@ function treatString(str) {
   return treatedString;
 }
 
+function treatDate(str) {
+  const string = str.split("T");
+  const oldDate = string[0].split("-");
+  const newDate = `${oldDate[2]}/${oldDate[1]}/${oldDate[0]}`;
+
+  return newDate;
+}
+
+function treatGender(str) {
+  if (str === 'male') return 'Masculino';
+  else return 'Feminino';
+}
+
 let currentPage = 1;
 let recordsPerPage = 9;
 let numPages = 0;
@@ -98,7 +111,7 @@ async function changePage(page, result = "") {
   const test = await getUsers();
 
   const word = result;
-  
+
   const users = test.filter((value) => {
     if (value.name.first.startsWith(word)) {
       return value;
@@ -120,20 +133,28 @@ async function changePage(page, result = "") {
 
   usersContainer.innerHTML = "";
 
-  for (let i = (page - 1) * recordsPerPage; i < (page * recordsPerPage) && i < users.length; i++) {
+  for (
+    let i = (page - 1) * recordsPerPage;
+    i < page * recordsPerPage && i < users.length;
+    i++
+  ) {
     showUsers += `
     <div id="users-box" class="users-box">
         <img src="${users[i].picture.large}" class="user-picture" />
         <div class="users-details">
-          <h5><a id="user-link" href="./user.html?user=${i}" onclick="loadUser(${i})">${treatString(users[i].name.first + ' ' + users[i].name.last)}</a></h5>
+          <h5><a id="user-link" href="./user.html?user=${i}">${treatString(
+      users[i].name.first + " " + users[i].name.last
+    )}</a></h5>
           <span class="street">${treatStreet(users[i].location.street)}</span>
           <span class="city">${treatString(users[i].location.city)} </br>
-          ${treatString(users[i].location.state)} - CEP: ${users[i].location.postcode}</span>
+          ${treatString(users[i].location.state)} - CEP: ${
+      users[i].location.postcode
+    }</span>
         </div>
     </div>
     `;
   }
-  
+
   usersContainer.innerHTML = showUsers;
 
   usersElement.appendChild(usersContainer);
@@ -156,28 +177,40 @@ window.onload = function () {
 };
 
 // User Details
-let userDetail = document.querySelector('.user-detail');
-userDetail.innerHTML = '';
+let userDetails = document.querySelector(".user-container");
+userDetails.innerHTML = "";
 
-function loadUser(id) {
+async function loadUser(id) {
+  const users = await getUsers();
+
   const showUser = `
-    <img class="user-picture" src="${users[id].picture.large}" />
-    <div class="user-info">
-        <h3 class="text-center">${treatString(users[id].name.first + ' ' + users[i].name.last)}</h3>
-        <h5 class="text-center">${treatString(users[id].gender)}</h5>
-        <h6 class="text-center">Endereço</h6>
-        <span>Rua: ${treatStreet(users[id].location.street)}</span> </br>
-        <span>Cidade: ${treatString(users[id].location.city)}</span> </br>
-        <span>Estado: ${treatString(users[id].location.state)}</span> </br>
-        <span>CEP: ${users[id].location.postcode}</span> </br>
-        <h6 class="text-center">Contato</h6>
-        <span>E-mail: ${users[id].gender}</span> </br>
-        <span>Telefone: ${users[id].phone} | Celular: ${users[id].cell}</span> </br>
-        <h6 class="text-center">Dados Pessoais</h6>
-        <span>Data de Nascimento: ${users[id].dob.date} | Idade: ${users[id].dob.age} anos</span> </br>
-        <span>Cadastrado(a) em: ${users[id].registered.date} | Há ${users[id].registered.age} anos</span>
+    <div class="user-detail">
+      <img class="user-picture" src="${users[id].picture.large}" />
+      <h4 class="text-center">${treatString(
+        users[id].name.first + " " + users[id].name.last
+      )}</h4>
+      <h6 class="text-center">${treatGender(users[id].gender)}</h6>
+      <div class="user-info">
+          <span class="detail-title">Endereço</span></br>
+          <span>Logradouro: ${treatStreet(users[id].location.street)}</span></br>
+          <span>Cidade: ${treatString(users[id].location.city)}</span></br>
+          <span>Estado: ${treatString(users[id].location.state)}</span></br>
+          <span>CEP: ${users[id].location.postcode}</span></br>
+          <span class="detail-title">Contato</span></br>
+          <span>E-mail: ${users[id].email}</span></br>
+          <span>Telefone: ${users[id].phone} | Celular: ${users[id].cell}</span></br>
+          <span class="detail-title">Dados Pessoais</span></br>
+          <span>Data de Nascimento: ${treatDate(users[id].dob.date)} | Idade: ${users[id].dob.age} anos</span></br>
+          <span>Cadastrado(a) em: ${treatDate(users[id].registered.date)} | Há ${users[id].registered.age} anos</span>
+      </div>
     </div>
   `;
 
-  userDetail.innerHTML = showUser;
+  userDetails.innerHTML = showUser;
 }
+
+const url = window.location.href.split("=");
+
+const id = url[1];
+
+loadUser(id);

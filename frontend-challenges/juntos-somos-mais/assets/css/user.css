@@ -27,13 +27,19 @@ body {
   background-color: #efefef;
 }
 
-.user-detail {
+.user-container {
   width: 40%;
-  height: 70%;
+  height: auto;
+}
+
+.user-detail {
+  width: 100%;
+  height: auto;
   margin: auto;
+  padding: 25px;
   background-color: #e2dfdf;
   border-radius: 5px;
-  font-size: 13px;
+  font-size: 14px;
 
   display: flex;
   flex-direction: column;
@@ -46,7 +52,15 @@ body {
 }
 
 .user-info {
+  width: 100%;
   font-weight: 300;
+  overflow-wrap: break-word;
+}
+
+.detail-title {
+  font-size: 17px;
+  font-weight: bold;
+  border-bottom: 1px solid grey;
 }
 
 .user-footer {
